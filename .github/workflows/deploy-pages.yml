@@ -1,0 +1,45 @@
+name: Build and deploy Quarto presentation to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Quarto
+        uses: quarto-dev/quarto-action@v2
+        with:
+          install: true
+
+      - name: Render Quarto presentation
+        run: |
+          quarto render notebooks/presentation.qmd --to revealjs
+
+      - name: Prepare artifact for Pages
+        run: |
+          mkdir -p public
+          # Quarto outputs presentation.html and presentation_files under notebooks/
+          if [ -f notebooks/presentation.html ]; then
+            cp notebooks/presentation.html public/index.html
+          fi
+          if [ -d notebooks/presentation_files ]; then
+            cp -r notebooks/presentation_files public/
+          fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1

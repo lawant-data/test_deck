@@ -1,0 +1,30 @@
+---
+title: "Example analysis"
+format: html
+execute: 
+  echo: true
+  warning: false
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# small synthetic dataset
+set.seed(42)
+df <- tibble(
+  time = seq.Date(Sys.Date()-29, Sys.Date(), by = "day"),
+  price = cumsum(rnorm(30, 0.2, 1)) + 100,
+  volume = round(runif(30, 100, 1000))
+)
+
+df <- df %>% mutate(return = c(NA, diff(log(price))))
+
+p <- ggplot(df, aes(time, price)) + geom_line() + theme_minimal() + labs(title = "Price series")
+print(p)
+
+dir.create("outputs/figures", recursive = TRUE, showWarnings = FALSE)
+ggsave("outputs/figures/example-price.png", p, width = 8, height = 4)
+```
+
+Text and results go here.

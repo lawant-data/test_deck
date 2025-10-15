@@ -1,0 +1,48 @@
+---
+title: "Example Quarto Deck"
+format: revealjs
+execute:
+  echo: false
+  warning: false
+---
+
+# Slide 1
+
+Welcome — a tiny Quarto deck with an R plot.
+
+---
+
+## Price series example
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+set.seed(42)
+df <- tibble(
+  time = seq.Date(Sys.Date()-29, Sys.Date(), by = "day"),
+  price = cumsum(rnorm(30, 0.2, 1)) + 100,
+  volume = round(runif(30, 100, 1000))
+)
+
+df <- df %>% mutate(return = c(NA, diff(log(price))))
+
+ggplot(df, aes(time, price)) +
+  geom_line(color = "#2c7fb8") +
+  geom_point(size = 1, alpha = 0.8) +
+  theme_minimal() +
+  labs(title = "Synthetic price series", x = "Date", y = "Price")
+```
+
+---
+
+## Save a figure (also written to outputs)
+
+```{r, out.width="80%"}
+# Save the PNG to the project-level outputs folder (one level up from notebooks/)
+dir.create("../outputs/figures", recursive = TRUE, showWarnings = FALSE)
+pngfile <- "../outputs/figures/presentation-price.png"
+# save the last plot to file and embed the saved PNG into the slide
+ggplot2::ggsave(pngfile, plot = last_plot(), width = 8, height = 4, device = "png")
+knitr::include_graphics(pngfile)
+```

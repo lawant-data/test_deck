@@ -1,0 +1,13 @@
+# renv
+renv/library/
+renv/staging/
+
+# outputs
+outputs/
+_site/
+
+# R artifacts
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/

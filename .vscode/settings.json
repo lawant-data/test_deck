@@ -1,0 +1,9 @@
+{
+  "r.rterm.linux": "/home/dlawant/.local/bin/radian",
+  "r.rpath.linux": "/usr/bin/R",
+  "r.lsp.path": "/usr/bin/R",
+  "r.sessionWatcher": true,
+  "r.plot.useHttpgd": true,
+  "r.rterm.option": ["--no-save", "--no-restore"],
+  "quarto.path": "quarto"
+}
